@@ -60,6 +60,50 @@ export default function NutritionAssessmentApp() {
     setIntakeData,
   } = usePatientStore();
 
+  const [patientInfo, setPatientInfo] = useState({
+    name: '山田 太郎',
+    age: 68,
+    gender: 'male',
+    height: 170,
+    weight: 62,
+    diagnosis: '慢性心不全、2型糖尿病',
+    admissionDate: '2025-06-01',
+  });
+
+  const [anthropometry, setAnthropometry] = useState({
+
+    weight: 62,
+    height: 170,
+    bmi: 21.5,
+    ac: 25,
+    tsf: 8,
+    amc: 22.5,
+    weightChange: -3.2,
+    edema: 'mild',
+  });
+
+  const [labData, setLabData] = useState({
+    albumin: 3.2,
+    prealbumin: 18,
+    transferrin: 180,
+    tlc: 1200,
+    hemoglobin: 11.5,
+    creatinine: 1.2,
+    glucose: 145,
+    hba1c: 7.2,
+    sodium: 138,
+    potassium: 4.2,
+    cholesterol: 150,
+  });
+
+
+  const [intakeData, setIntakeData] = useState({
+    energy: 1200,
+    protein: 45,
+    energyAchievement: 67,
+    proteinAchievement: 63,
+  });
+
   const [assessment, setAssessment] = useState<any>(null);
 
   useEffect(() => {
@@ -103,6 +147,8 @@ export default function NutritionAssessmentApp() {
 
   const calculateProteinNeeds = () => {
     return Math.round(anthropometry.weight * 1.2);
+  };
+
   };
 
   const calculateSGA = () => {

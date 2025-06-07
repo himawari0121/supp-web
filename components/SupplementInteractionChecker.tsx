@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import useSupplementStore from '../stores/useSupplementStore';
+import { useState, useEffect } from 'react';
 import {
   Card,
   CardContent,
@@ -60,6 +61,33 @@ export default function SupplementInteractionChecker() {
     };
     fetchData().catch(console.error);
   }, []);
+  const [supplementDatabase, setSupplementDatabase] = useState<any>({
+    vitamins: [],
+    minerals: [],
+    herbs: [],
+    others: [],
+  });
+  const [medicationDatabase, setMedicationDatabase] = useState<any[]>([]);
+  const [interactionDatabase, setInteractionDatabase] = useState<any[]>([]);
+  const [selectedSupplements, setSelectedSupplements] = useState<any[]>([]);
+  const [selectedMedications, setSelectedMedications] = useState<any[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [interactions, setInteractions] = useState<any[]>([]);
+  const [activeTab, setActiveTab] = useState('selection');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const [suppRes, medRes, intRes] = await Promise.all([
+        fetch('/api/supplements').then((r) => r.json()),
+        fetch('/api/medications').then((r) => r.json()),
+        fetch('/api/interactions').then((r) => r.json()),
+      ]);
+      setSupplementDatabase(suppRes);
+      setMedicationDatabase(medRes);
+      setInteractionDatabase(intRes);
+    };
+    fetchData().catch(console.error);
+  }, []);
 
   const allSupplements = [
     ...supplementDatabase.vitamins,
@@ -72,6 +100,19 @@ export default function SupplementInteractionChecker() {
     supp.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const toggleSupplement = (supp: any) => {
+    setSelectedSupplements((prev) => {
+      const exists = prev.find((s) => s.id === supp.id);
+      return exists ? prev.filter((s) => s.id !== supp.id) : [...prev, supp];
+    });
+  };
+
+  const toggleMedication = (med: any) => {
+    setSelectedMedications((prev) => {
+      const exists = prev.find((m) => m.id === med.id);
+      return exists ? prev.filter((m) => m.id !== med.id) : [...prev, med];
+    });
+  };
 
   const checkInteractions = () => {
     const found: any[] = [];
@@ -182,6 +223,213 @@ export default function SupplementInteractionChecker() {
         </TabsList>
 
         <SupplementSelectionTab />
+        <TabsContent value="selection" className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>サプリメント選択</CardTitle>
+                <CardDescription>服用中のサプリメントを選択してください</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      placeholder="サプリメント名で検索..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+
+                  <ScrollArea className="h-[400px] pr-4">
+                    <div className="space-y-4">
+                      <div>
+                        <h4 className="font-semibold mb-2 flex items-center gap-2">
+                          <Zap className="h-4 w-4" />
+                          ビタミン
+                        </h4>
+                        <div className="space-y-2">
+                          {supplementDatabase.vitamins
+                            .filter((v) => v.name.toLowerCase().includes(searchTerm.toLowerCase()))
+                            .map((vitamin) => (
+                              <div
+                                key={vitamin.id}
+                                className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-colors ${
+                                  selectedSupplements.find((s) => s.id === vitamin.id)
+                                    ? 'bg-purple-50 dark:bg-purple-950 border-purple-300'
+                                    : 'hover:bg-muted'
+                                }`}
+                                onClick={() => toggleSupplement(vitamin)}
+                              >
+                                <div>
+                                  <p className="font-medium">{vitamin.name}</p>
+                                  <p className="text-sm text-muted-foreground">{vitamin.dosage}</p>
+                                </div>
+                                {selectedSupplements.find((s) => s.id === vitamin.id) && (
+                                  <CheckCircle className="h-5 w-5 text-purple-600" />
+                                )}
+                              </div>
+                            ))}
+                        </div>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold mb-2 flex items-center gap-2">
+                          <FlaskConical className="h-4 w-4" />
+                          ミネラル
+                        </h4>
+                        <div className="space-y-2">
+                          {supplementDatabase.minerals
+                            .filter((m) => m.name.toLowerCase().includes(searchTerm.toLowerCase()))
+                            .map((mineral) => (
+                              <div
+                                key={mineral.id}
+                                className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-colors ${
+                                  selectedSupplements.find((s) => s.id === mineral.id)
+                                    ? 'bg-purple-50 dark:bg-purple-950 border-purple-300'
+                                    : 'hover:bg-muted'
+                                }`}
+                                onClick={() => toggleSupplement(mineral)}
+                              >
+                                <div>
+                                  <p className="font-medium">{mineral.name}</p>
+                                  <p className="text-sm text-muted-foreground">{mineral.dosage}</p>
+                                </div>
+                                {selectedSupplements.find((s) => s.id === mineral.id) && (
+                                  <CheckCircle className="h-5 w-5 text-purple-600" />
+                                )}
+                              </div>
+                            ))}
+                        </div>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold mb-2 flex items-center gap-2">
+                          <Brain className="h-4 w-4" />
+                          ハーブ・植物由来
+                        </h4>
+                        <div className="space-y-2">
+                          {supplementDatabase.herbs
+                            .filter((h) => h.name.toLowerCase().includes(searchTerm.toLowerCase()))
+                            .map((herb) => (
+                              <div
+                                key={herb.id}
+                                className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-colors ${
+                                  selectedSupplements.find((s) => s.id === herb.id)
+                                    ? 'bg-purple-50 dark:bg-purple-950 border-purple-300'
+                                    : 'hover:bg-muted'
+                                }`}
+                                onClick={() => toggleSupplement(herb)}
+                              >
+                                <div>
+                                  <p className="font-medium">{herb.name}</p>
+                                  <p className="text-sm text-muted-foreground">{herb.dosage}</p>
+                                </div>
+                                {selectedSupplements.find((s) => s.id === herb.id) && (
+                                  <CheckCircle className="h-5 w-5 text-purple-600" />
+                                )}
+                              </div>
+                            ))}
+                        </div>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold mb-2 flex items-center gap-2">
+                          <Heart className="h-4 w-4" />
+                          その他
+                        </h4>
+                        <div className="space-y-2">
+                          {supplementDatabase.others
+                            .filter((o) => o.name.toLowerCase().includes(searchTerm.toLowerCase()))
+                            .map((other) => (
+                              <div
+                                key={other.id}
+                                className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-colors ${
+                                  selectedSupplements.find((s) => s.id === other.id)
+                                    ? 'bg-purple-50 dark:bg-purple-950 border-purple-300'
+                                    : 'hover:bg-muted'
+                                }`}
+                                onClick={() => toggleSupplement(other)}
+                              >
+                                <div>
+                                  <p className="font-medium">{other.name}</p>
+                                  <p className="text-sm text-muted-foreground">{other.dosage}</p>
+                                </div>
+                                {selectedSupplements.find((s) => s.id === other.id) && (
+                                  <CheckCircle className="h-5 w-5 text-purple-600" />
+                                )}
+                              </div>
+                            ))}
+                        </div>
+                      </div>
+                    </div>
+                  </ScrollArea>
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>医薬品選択</CardTitle>
+                <CardDescription>服用中の医薬品を選択してください（任意）</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ScrollArea className="h-[480px] pr-4">
+                  <div className="space-y-2">
+                    {medicationDatabase.map((medication) => (
+                      <div
+                        key={medication.id}
+                        className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-colors ${
+                          selectedMedications.find((m) => m.id === medication.id)
+                            ? 'bg-blue-50 dark:bg-blue-950 border-blue-300'
+                            : 'hover:bg-muted'
+                        }`}
+                        onClick={() => toggleMedication(medication)}
+                      >
+                        <div>
+                          <p className="font-medium">{medication.name}</p>
+                          <p className="text-sm text-muted-foreground">{medication.category}</p>
+                        </div>
+                        {selectedMedications.find((m) => m.id === medication.id) && (
+                          <CheckCircle className="h-5 w-5 text-blue-600" />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </CardContent>
+            </Card>
+          </div>
+          <Card>
+            <CardHeader>
+              <CardTitle>選択済みアイテム</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-wrap gap-2">
+                {selectedSupplements.map((supp) => (
+                  <Badge key={supp.id} variant="secondary" className="pl-2">
+                    {getCategoryIcon(supp.category)}
+                    <span className="ml-1">{supp.name}</span>
+                    <button onClick={() => toggleSupplement(supp)} className="ml-2 hover:text-destructive">
+                      <X className="h-3 w-3" />
+                    </button>
+                  </Badge>
+                ))}
+                {selectedMedications.map((med) => (
+                  <Badge key={med.id} variant="outline" className="pl-2">
+                    <Pill className="h-3 w-3" />
+                    <span className="ml-1">{med.name}</span>
+                    <button onClick={() => toggleMedication(med)} className="ml-2 hover:text-destructive">
+                      <X className="h-3 w-3" />
+                    </button>
+                  </Badge>
+                ))}
+              </div>
+              {(selectedSupplements.length > 0 || selectedMedications.length > 0) && (
+                <Button onClick={checkInteractions} className="w-full mt-4" size="lg">
+                  相互作用をチェック
+                </Button>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
         <TabsContent value="results" className="space-y-6">
           {interactions.length > 0 ? (
             <>

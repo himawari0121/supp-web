@@ -48,6 +48,19 @@ import {
 // 栄養アセスメントアプリケーション
 export default function NutritionAssessmentApp() {
   const [patientInfo, setPatientInfo] = useState({
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from './ui/card';
+import { Alert, AlertDescription } from './ui/alert';
+import { Button } from './ui/button';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import { Badge } from './ui/badge';
+import { ScrollArea } from './ui/scroll-area';
+import { AlertCircle, TrendingUp, TrendingDown, Activity, Heart, Brain, Utensils } from './icons';
+import { calculateCONUT } from '../utils/nutrition-assessment';
+
+export default function NutritionAssessmentApp() {
+  const [patientInfo] = useState({
     name: '山田 太郎',
     age: 68,
     gender: 'male',
@@ -85,6 +98,20 @@ export default function NutritionAssessmentApp() {
   const [intakeData, setIntakeData] = useState({
     energy: 1200,
     protein: 45,
+  const [anthropometry] = useState({
+    weight: 62,
+    height: 170,
+    bmi: 21.5,
+    weightChange: -3.2,
+  });
+
+  const [labData] = useState({
+    albumin: 3.2,
+    prealbumin: 18,
+    tlc: 1200,
+  });
+
+  const [intakeData] = useState({
     energyAchievement: 67,
     proteinAchievement: 63,
   });
@@ -122,6 +149,20 @@ export default function NutritionAssessmentApp() {
     return Math.round(anthropometry.weight * 1.2);
   };
 
+    const h = anthropometry.height / 100;
+    return (anthropometry.weight / (h * h)).toFixed(1);
+  };
+
+  const calculateIBW = () => {
+    const h = anthropometry.height / 100;
+    return (22 * h * h).toFixed(1);
+  };
+
+  const calculatePercentIBW = () => {
+    const ibw = Number(calculateIBW());
+    return ((anthropometry.weight / ibw) * 100).toFixed(1);
+  };
+
   const calculateSGA = () => {
     let score = 0;
     if (anthropometry.weightChange > -5) score += 0;
@@ -134,6 +175,7 @@ export default function NutritionAssessmentApp() {
 
     score += 0;
     score += 1;
+
 
     if (labData.albumin >= 3.5) score += 0;
     else if (labData.albumin >= 3.0) score += 1;
@@ -234,6 +276,12 @@ export default function NutritionAssessmentApp() {
     { date: '5月', albumin: 3.3, prealbumin: 20 },
     { date: '6月', albumin: 3.2, prealbumin: 18 },
   ];
+
+  const performAssessment = () => {
+    const sga = calculateSGA();
+    const conut = calculateCONUT(labData.albumin, labData.tlc, 150);
+    setAssessment({ sga, conut });
+  };
 
   useEffect(() => {
     performAssessment();
@@ -714,6 +762,60 @@ export default function NutritionAssessmentApp() {
           </div>
         </CardContent>
       </Card>
+    <div className="w-full max-w-3xl mx-auto p-4">
+      <div style={{ background: '#3b82f6', color: 'white', padding: '1rem', borderRadius: '4px' }}>
+        <h1 style={{ fontSize: '1.5rem' }}>栄養アセスメント・管理システム</h1>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>患者情報</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p>{patientInfo.name} / {patientInfo.age}歳 / {patientInfo.gender === 'male' ? '男性' : '女性'}</p>
+          <p>{patientInfo.diagnosis}</p>
+        </CardContent>
+      </Card>
+
+      <Tabs defaultValue="assessment">
+        <TabsList>
+          <TabsTrigger value="assessment">栄養評価</TabsTrigger>
+          <TabsTrigger value="monitoring">モニタリング</TabsTrigger>
+        </TabsList>
+        <TabsContent value="assessment">
+          <Card>
+            <CardHeader>
+              <CardTitle>身体計測</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>身長 {anthropometry.height} cm</p>
+              <p>体重 {anthropometry.weight} kg</p>
+              <p>BMI {calculateBMI()}</p>
+              <p>理想体重 {calculateIBW()} kg</p>
+              <p>%IBW {calculatePercentIBW()}%</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>栄養評価スコア</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {assessment && (
+                <>
+                  <p>SGA: {assessment.sga}</p>
+                  <p>CONUT: {assessment.conut}</p>
+                </>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="monitoring">
+          <Alert>
+            <AlertDescription>モニタリング機能は未実装です。</AlertDescription>
+          </Alert>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

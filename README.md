@@ -10,6 +10,7 @@ A nutrition management prototype using Next.js 14.
 - Nutrition diary
 - Education modules
 
+
 ## Development
 
 ```bash

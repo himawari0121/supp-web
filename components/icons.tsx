@@ -31,3 +31,4 @@ export const Timer = () => <span>⏱️</span>;
 export const Award = () => <span>🏆</span>;
 export const FileText = () => <span>📄</span>;
 export const Download = () => <span>⬇️</span>;
+

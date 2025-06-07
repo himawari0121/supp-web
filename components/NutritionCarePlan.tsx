@@ -29,6 +29,10 @@ export default function NutritionCarePlan() {
 
   return (
     <div className="space-y-6 w-full max-w-3xl mx-auto p-4">
+
+export default function NutritionCarePlan() {
+  return (
+    <div className="w-full max-w-3xl mx-auto p-4">
       <Card>
         <CardHeader>
           <CardTitle>栄養ケアプラン</CardTitle>
@@ -146,6 +150,7 @@ export default function NutritionCarePlan() {
               </table>
             </section>
           </div>
+          <p>ここに栄養ケアプランの内容が表示されます。</p>
         </CardContent>
       </Card>
     </div>

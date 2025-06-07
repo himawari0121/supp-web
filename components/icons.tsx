@@ -1,34 +1,72 @@
-export const AlertCircle = () => <span>⚠️</span>;
-export const TrendingUp = () => <span>⬆️</span>;
-export const TrendingDown = () => <span>⬇️</span>;
-export const Activity = () => <span>🏃</span>;
-export const Heart = () => <span>❤️</span>;
-export const Brain = () => <span>🧠</span>;
-export const Utensils = () => <span>🍴</span>;
-export const Pill = () => <span>💊</span>;
-export const FlaskConical = () => <span>⚗️</span>;
-export const ShieldAlert = () => <span>🛡️</span>;
-export const Clock = () => <span>⏰</span>;
-export const Zap = () => <span>⚡</span>;
-export const CheckCircle = () => <span>✅</span>;
-export const Search = () => <span>🔍</span>;
-export const X = () => <span>❌</span>;
-export const Info = () => <span>ℹ️</span>;
-export const Users = () => <span>👥</span>;
-export const BookOpen = () => <span>📖</span>;
-export const Play = () => <span>▶️</span>;
-export const Pause = () => <span>⏸️</span>;
-export const RotateCcw = () => <span>🔄</span>;
-export const ChevronRight = () => <span>➡️</span>;
-export const ChevronLeft = () => <span>⬅️</span>;
-export const Apple = () => <span>🍎</span>;
-export const Droplets = () => <span>💧</span>;
-export const Flame = () => <span>🔥</span>;
-export const Scale = () => <span>⚖️</span>;
-export const Calculator = () => <span>🧮</span>;
-export const TargetIcon = () => <span>🎯</span>;
-export const Timer = () => <span>⏱️</span>;
-export const Award = () => <span>🏆</span>;
-export const FileText = () => <span>📄</span>;
-export const Download = () => <span>⬇️</span>;
+import {
+  AlertCircle,
+  TrendingUp,
+  TrendingDown,
+  Activity,
+  Heart,
+  Brain,
+  Utensils,
+  Pill,
+  FlaskConical,
+  ShieldAlert,
+  Clock,
+  Zap,
+  CheckCircle,
+  Search,
+  X,
+  Info,
+  Users,
+  BookOpen,
+  Play,
+  Pause,
+  RotateCcw,
+  ChevronRight,
+  ChevronLeft,
+  Apple,
+  Droplets,
+  Flame,
+  Scale,
+  Calculator,
+  Target,
+  Timer,
+  Award,
+  FileText,
+  Download,
+} from 'lucide-react';
+
+export {
+  AlertCircle,
+  TrendingUp,
+  TrendingDown,
+  Activity,
+  Heart,
+  Brain,
+  Utensils,
+  Pill,
+  FlaskConical,
+  ShieldAlert,
+  Clock,
+  Zap,
+  CheckCircle,
+  Search,
+  X,
+  Info,
+  Users,
+  BookOpen,
+  Play,
+  Pause,
+  RotateCcw,
+  ChevronRight,
+  ChevronLeft,
+  Apple,
+  Droplets,
+  Flame,
+  Scale,
+  Calculator,
+  Target as TargetIcon,
+  Timer,
+  Award,
+  FileText,
+  Download,
+};
 

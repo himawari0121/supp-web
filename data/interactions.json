@@ -1,0 +1,56 @@
+[
+  {
+    "items": ["vit-k", "warfarin"],
+    "severity": "major",
+    "type": "antagonism",
+    "mechanism": "ビタミンKはワルファリンの抗凝固作用を減弱させます",
+    "clinicalEffect": "INRの低下、血栓症リスクの増加",
+    "recommendation": "ビタミンK摂取量を一定に保つ。INRモニタリングの強化",
+    "evidence": "high"
+  },
+  {
+    "items": ["calcium", "iron"],
+    "severity": "moderate",
+    "type": "absorption",
+    "mechanism": "カルシウムは鉄の吸収を競合的に阻害します",
+    "clinicalEffect": "鉄の吸収率が30-50%低下",
+    "recommendation": "摂取時間を2時間以上あける",
+    "evidence": "high"
+  },
+  {
+    "items": ["stjohns", "digoxin"],
+    "severity": "major",
+    "type": "metabolism",
+    "mechanism": "CYP3A4およびP-糖蛋白の誘導により薬剤の代謝が促進",
+    "clinicalEffect": "ジゴキシン血中濃度の低下、治療効果の減弱",
+    "recommendation": "併用を避ける。代替のハーブを検討",
+    "evidence": "high"
+  },
+  {
+    "items": ["vit-d", "calcium"],
+    "severity": "beneficial",
+    "type": "synergism",
+    "mechanism": "ビタミンDはカルシウムの腸管吸収を促進",
+    "clinicalEffect": "カルシウム吸収率の向上",
+    "recommendation": "骨粗鬆症予防に有効な組み合わせ",
+    "evidence": "high"
+  },
+  {
+    "items": ["omega3", "aspirin"],
+    "severity": "moderate",
+    "type": "additive",
+    "mechanism": "両者とも血小板凝集を抑制",
+    "clinicalEffect": "出血リスクの増加",
+    "recommendation": "高用量での併用は注意。出血症状をモニタリング",
+    "evidence": "moderate"
+  },
+  {
+    "items": ["magnesium", "levothyroxine"],
+    "severity": "moderate",
+    "type": "absorption",
+    "mechanism": "マグネシウムがレボチロキシンの吸収を阻害",
+    "clinicalEffect": "甲状腺ホルモンの効果減弱",
+    "recommendation": "摂取時間を4時間以上あける",
+    "evidence": "moderate"
+  }
+]

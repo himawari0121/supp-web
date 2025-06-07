@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Card,
   CardContent,
@@ -92,6 +92,18 @@ export default function NutritionAssessmentApp() {
   });
 
   const [assessment, setAssessment] = useState<any>(null);
+
+  useEffect(() => {
+    fetch('/api/patient')
+      .then((res) => res.json())
+      .then((data) => {
+        setPatientInfo(data.patientInfo);
+        setAnthropometry(data.anthropometry);
+        setLabData(data.labData);
+        setIntakeData(data.intakeData);
+      })
+      .catch(console.error);
+  }, []);
 
   const calculateBMI = () => {
     const heightInM = anthropometry.height / 100;

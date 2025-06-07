@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Card,
   CardContent,
@@ -28,112 +28,35 @@ import {
   Utensils,
 } from './icons';
 
-const supplementDatabase = {
-  vitamins: [
-    { id: 'vit-d', name: 'ビタミンD', category: 'vitamin', dosage: '1000-4000 IU/日' },
-    { id: 'vit-c', name: 'ビタミンC', category: 'vitamin', dosage: '500-1000 mg/日' },
-    { id: 'vit-e', name: 'ビタミンE', category: 'vitamin', dosage: '400 IU/日' },
-    { id: 'vit-k', name: 'ビタミンK', category: 'vitamin', dosage: '90-120 μg/日' },
-    { id: 'vit-b12', name: 'ビタミンB12', category: 'vitamin', dosage: '2.4 μg/日' },
-    { id: 'folate', name: '葉酸', category: 'vitamin', dosage: '400 μg/日' },
-  ],
-  minerals: [
-    { id: 'calcium', name: 'カルシウム', category: 'mineral', dosage: '1000-1200 mg/日' },
-    { id: 'iron', name: '鉄', category: 'mineral', dosage: '8-18 mg/日' },
-    { id: 'magnesium', name: 'マグネシウム', category: 'mineral', dosage: '310-420 mg/日' },
-    { id: 'zinc', name: '亜鉛', category: 'mineral', dosage: '8-11 mg/日' },
-    { id: 'selenium', name: 'セレン', category: 'mineral', dosage: '55 μg/日' },
-  ],
-  herbs: [
-    { id: 'ginkgo', name: 'イチョウ葉', category: 'herb', dosage: '120-240 mg/日' },
-    { id: 'ginseng', name: '高麗人参', category: 'herb', dosage: '200-400 mg/日' },
-    { id: 'stjohns', name: 'セントジョーンズワート', category: 'herb', dosage: '300 mg×3回/日' },
-    { id: 'echinacea', name: 'エキナセア', category: 'herb', dosage: '300-500 mg×3回/日' },
-    { id: 'garlic', name: 'ニンニク', category: 'herb', dosage: '600-1200 mg/日' },
-  ],
-  others: [
-    { id: 'omega3', name: 'オメガ3脂肪酸', category: 'other', dosage: '1-3 g/日' },
-    { id: 'probiotics', name: 'プロバイオティクス', category: 'other', dosage: '1-10億CFU/日' },
-    { id: 'coq10', name: 'コエンザイムQ10', category: 'other', dosage: '100-200 mg/日' },
-    { id: 'glucosamine', name: 'グルコサミン', category: 'other', dosage: '1500 mg/日' },
-  ],
-};
-
-const medicationDatabase = [
-  { id: 'warfarin', name: 'ワルファリン', category: '抗凝固薬' },
-  { id: 'aspirin', name: 'アスピリン', category: '抗血小板薬' },
-  { id: 'metformin', name: 'メトホルミン', category: '糖尿病薬' },
-  { id: 'levothyroxine', name: 'レボチロキシン', category: '甲状腺ホルモン' },
-  { id: 'omeprazole', name: 'オメプラゾール', category: 'PPI' },
-  { id: 'amlodipine', name: 'アムロジピン', category: 'Ca拮抗薬' },
-  { id: 'atorvastatin', name: 'アトルバスタチン', category: 'スタチン' },
-  { id: 'digoxin', name: 'ジゴキシン', category: '強心薬' },
-];
-
-const interactionDatabase = [
-  {
-    items: ['vit-k', 'warfarin'],
-    severity: 'major',
-    type: 'antagonism',
-    mechanism: 'ビタミンKはワルファリンの抗凝固作用を減弱させます',
-    clinicalEffect: 'INRの低下、血栓症リスクの増加',
-    recommendation: 'ビタミンK摂取量を一定に保つ。INRモニタリングの強化',
-    evidence: 'high',
-  },
-  {
-    items: ['calcium', 'iron'],
-    severity: 'moderate',
-    type: 'absorption',
-    mechanism: 'カルシウムは鉄の吸収を競合的に阻害します',
-    clinicalEffect: '鉄の吸収率が30-50%低下',
-    recommendation: '摂取時間を2時間以上あける',
-    evidence: 'high',
-  },
-  {
-    items: ['stjohns', 'digoxin'],
-    severity: 'major',
-    type: 'metabolism',
-    mechanism: 'CYP3A4およびP-糖蛋白の誘導により薬剤の代謝が促進',
-    clinicalEffect: 'ジゴキシン血中濃度の低下、治療効果の減弱',
-    recommendation: '併用を避ける。代替のハーブを検討',
-    evidence: 'high',
-  },
-  {
-    items: ['vit-d', 'calcium'],
-    severity: 'beneficial',
-    type: 'synergism',
-    mechanism: 'ビタミンDはカルシウムの腸管吸収を促進',
-    clinicalEffect: 'カルシウム吸収率の向上',
-    recommendation: '骨粗鬆症予防に有効な組み合わせ',
-    evidence: 'high',
-  },
-  {
-    items: ['omega3', 'aspirin'],
-    severity: 'moderate',
-    type: 'additive',
-    mechanism: '両者とも血小板凝集を抑制',
-    clinicalEffect: '出血リスクの増加',
-    recommendation: '高用量での併用は注意。出血症状をモニタリング',
-    evidence: 'moderate',
-  },
-  {
-    items: ['magnesium', 'levothyroxine'],
-    severity: 'moderate',
-    type: 'absorption',
-    mechanism: 'マグネシウムがレボチロキシンの吸収を阻害',
-    clinicalEffect: '甲状腺ホルモンの効果減弱',
-    recommendation: '摂取時間を4時間以上あける',
-    evidence: 'moderate',
-    recommendation: 'ビタミンK摂取量を一定に保つ',
-  },
-];
 
 export default function SupplementInteractionChecker() {
+  const [supplementDatabase, setSupplementDatabase] = useState<any>({
+    vitamins: [],
+    minerals: [],
+    herbs: [],
+    others: [],
+  });
+  const [medicationDatabase, setMedicationDatabase] = useState<any[]>([]);
+  const [interactionDatabase, setInteractionDatabase] = useState<any[]>([]);
   const [selectedSupplements, setSelectedSupplements] = useState<any[]>([]);
   const [selectedMedications, setSelectedMedications] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [interactions, setInteractions] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState('selection');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const [suppRes, medRes, intRes] = await Promise.all([
+        fetch('/api/supplements').then((r) => r.json()),
+        fetch('/api/medications').then((r) => r.json()),
+        fetch('/api/interactions').then((r) => r.json()),
+      ]);
+      setSupplementDatabase(suppRes);
+      setMedicationDatabase(medRes);
+      setInteractionDatabase(intRes);
+    };
+    fetchData().catch(console.error);
+  }, []);
 
   const allSupplements = [
     ...supplementDatabase.vitamins,

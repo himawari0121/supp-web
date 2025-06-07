@@ -1,0 +1,16 @@
+export const AlertCircle = () => <span>⚠️</span>;
+export const TrendingUp = () => <span>⬆️</span>;
+export const TrendingDown = () => <span>⬇️</span>;
+export const Activity = () => <span>🏃</span>;
+export const Heart = () => <span>❤️</span>;
+export const Brain = () => <span>🧠</span>;
+export const Utensils = () => <span>🍴</span>;
+export const Pill = () => <span>💊</span>;
+export const FlaskConical = () => <span>⚗️</span>;
+export const ShieldAlert = () => <span>🛡️</span>;
+export const Clock = () => <span>⏰</span>;
+export const Zap = () => <span>⚡</span>;
+export const CheckCircle = () => <span>✅</span>;
+export const Search = () => <span>🔍</span>;
+export const X = () => <span>❌</span>;
+export const Info = () => <span>ℹ️</span>;

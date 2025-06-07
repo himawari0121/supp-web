@@ -1,6 +1,12 @@
 # Supp Web
 
-A minimal Next.js 14 TypeScript application.
+A nutrition management prototype using Next.js 14.
+
+## Features
+- Nutrition assessment
+- Supplement interaction checker
+- Nutrition care plan
+- Monitoring dashboard
 
 ## Development
 
@@ -15,4 +21,3 @@ npm run dev
 npm run build
 npm start
 ```
-

@@ -7,6 +7,9 @@ A nutrition management prototype using Next.js 14.
 - Supplement interaction checker
 - Nutrition care plan
 - Monitoring dashboard
+- Nutrition diary
+- Education modules
+
 
 ## Development
 

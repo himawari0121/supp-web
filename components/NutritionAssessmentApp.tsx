@@ -48,48 +48,6 @@ import {
 // 栄養アセスメントアプリケーション
 export default function NutritionAssessmentApp() {
   const [patientInfo, setPatientInfo] = useState({
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from './ui/card';
-import { Alert, AlertDescription } from './ui/alert';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from './ui/tabs';
-import { Badge } from './ui/badge';
-import {
-  LineChart,
-  Line,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  Radar,
-} from 'recharts';
-import {
-  AlertCircle,
-  TrendingUp,
-  TrendingDown,
-  Activity,
-  Heart,
-  Brain,
-  Utensils,
-} from './icons';
-
-// 栄養アセスメントアプリケーション
-export default function NutritionAssessmentApp() {
-  const [patientInfo, setPatientInfo] = useState({
     name: '山田 太郎',
     age: 68,
     gender: 'male',
@@ -125,33 +83,6 @@ export default function NutritionAssessmentApp() {
     cholesterol: 150,
   });
 
-  const [intakeData, setIntakeData] = useState({
-    energy: 1200,
-    protein: 45,
-  const [anthropometry] = useState({
-    weight: 62,
-    height: 170,
-    bmi: 21.5,
-    ac: 25,
-    tsf: 8,
-    amc: 22.5,
-    weightChange: -3.2,
-    edema: 'mild',
-  });
-
-  const [labData, setLabData] = useState({
-    albumin: 3.2,
-    prealbumin: 18,
-    transferrin: 180,
-    tlc: 1200,
-    hemoglobin: 11.5,
-    creatinine: 1.2,
-    glucose: 145,
-    hba1c: 7.2,
-    sodium: 138,
-    potassium: 4.2,
-    cholesterol: 150,
-  });
 
   const [intakeData, setIntakeData] = useState({
     energy: 1200,
@@ -193,34 +124,6 @@ export default function NutritionAssessmentApp() {
     return Math.round(anthropometry.weight * 1.2);
   };
 
-    const h = anthropometry.height / 100;
-    return (anthropometry.weight / (h * h)).toFixed(1);
-  };
-
-  const calculateIBW = () => {
-    const heightInM = anthropometry.height / 100;
-    return (22 * heightInM * heightInM).toFixed(1);
-  };
-
-  const calculatePercentIBW = () => {
-    const ibw = parseFloat(calculateIBW());
-    return ((anthropometry.weight / ibw) * 100).toFixed(1);
-  };
-
-  const calculateEnergyNeeds = () => {
-    const bmr =
-      patientInfo.gender === 'male'
-        ? 66.47 + 13.75 * anthropometry.weight + 5.0 * anthropometry.height - 6.76 * patientInfo.age
-        : 655.1 + 9.56 * anthropometry.weight + 1.85 * anthropometry.height - 4.68 * patientInfo.age;
-
-    const activityFactor = 1.3;
-    const stressFactor = 1.1;
-
-    return Math.round(bmr * activityFactor * stressFactor);
-  };
-
-  const calculateProteinNeeds = () => {
-    return Math.round(anthropometry.weight * 1.2);
   };
 
   const calculateSGA = () => {

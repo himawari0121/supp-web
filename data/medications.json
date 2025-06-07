@@ -1,0 +1,10 @@
+[
+  { "id": "warfarin", "name": "ワルファリン", "category": "抗凝固薬" },
+  { "id": "aspirin", "name": "アスピリン", "category": "抗血小板薬" },
+  { "id": "metformin", "name": "メトホルミン", "category": "糖尿病薬" },
+  { "id": "levothyroxine", "name": "レボチロキシン", "category": "甲状腺ホルモン" },
+  { "id": "omeprazole", "name": "オメプラゾール", "category": "PPI" },
+  { "id": "amlodipine", "name": "アムロジピン", "category": "Ca拮抗薬" },
+  { "id": "atorvastatin", "name": "アトルバスタチン", "category": "スタチン" },
+  { "id": "digoxin", "name": "ジゴキシン", "category": "強心薬" }
+]

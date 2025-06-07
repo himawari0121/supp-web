@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import useSupplementStore from '../stores/useSupplementStore';
 import { useState, useEffect } from 'react';
 import {
   Card,
@@ -29,7 +31,36 @@ import {
 } from './icons';
 
 
+import SupplementSelectionTab from './SupplementSelectionTab';
 export default function SupplementInteractionChecker() {
+  const {
+    supplementDatabase,
+    medicationDatabase,
+    interactionDatabase,
+    selectedSupplements,
+    selectedMedications,
+    searchTerm,
+    interactions,
+    activeTab,
+    setDatabases,
+    toggleSupplement,
+    toggleMedication,
+    setSearchTerm,
+    setActiveTab,
+    setInteractions,
+  } = useSupplementStore();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const [suppRes, medRes, intRes] = await Promise.all([
+        fetch('/api/supplements').then((r) => r.json()),
+        fetch('/api/medications').then((r) => r.json()),
+        fetch('/api/interactions').then((r) => r.json()),
+      ]);
+      setDatabases(suppRes, medRes, intRes);
+    };
+    fetchData().catch(console.error);
+  }, []);
   const [supplementDatabase, setSupplementDatabase] = useState<any>({
     vitamins: [],
     minerals: [],
@@ -85,51 +116,29 @@ export default function SupplementInteractionChecker() {
 
   const checkInteractions = () => {
     const found: any[] = [];
-    const allSelectedIds = [
+    const allIds = [
       ...selectedSupplements.map((s) => s.id),
       ...selectedMedications.map((m) => m.id),
     ];
-    for (let i = 0; i < allSelectedIds.length; i++) {
-      for (let j = i + 1; j < allSelectedIds.length; j++) {
-        const interaction = interactionDatabase.find(
-          (int) =>
-            int.items.includes(allSelectedIds[i]) && int.items.includes(allSelectedIds[j])
-        );
-        if (interaction) {
-          const item1 = [...allSupplements, ...medicationDatabase].find(
-            (item) => item.id === allSelectedIds[i]
-          );
-          const item2 = [...allSupplements, ...medicationDatabase].find(
-            (item) => item.id === allSelectedIds[j]
-          );
-          found.push({
-            ...interaction,
-            item1Name: item1?.name || allSelectedIds[i],
-            item2Name: item2?.name || allSelectedIds[j],
-          });
 
-        }
-      }
-    }
-    if (selectedSupplements.length > 1) {
-      const timingRecommendations = generateTimingRecommendations(selectedSupplements);
-      found.push(...timingRecommendations);
-    }
-    const allIds = [...selectedSupplements.map(s => s.id), ...selectedMedications.map(m => m.id)];
     for (let i = 0; i < allIds.length; i++) {
       for (let j = i + 1; j < allIds.length; j++) {
-        const int = interactionDatabase.find(d => d.items.includes(allIds[i]) && d.items.includes(allIds[j]));
-        if (int) {
-          const item1 = [...allSupplements, ...medicationDatabase].find(x => x.id === allIds[i]);
-          const item2 = [...allSupplements, ...medicationDatabase].find(x => x.id === allIds[j]);
-          found.push({ ...int, item1Name: item1?.name, item2Name: item2?.name });
+        const interaction = interactionDatabase.find(
+          (int) => int.items.includes(allIds[i]) && int.items.includes(allIds[j])
+        );
+        if (interaction) {
+          const item1 = [...allSupplements, ...medicationDatabase].find((x) => x.id === allIds[i]);
+          const item2 = [...allSupplements, ...medicationDatabase].find((x) => x.id === allIds[j]);
+          found.push({ ...interaction, item1Name: item1?.name, item2Name: item2?.name });
         }
       }
     }
+
     if (selectedSupplements.length > 1) {
       const timingRecommendations = generateTimingRecommendations(selectedSupplements);
       found.push(...timingRecommendations);
     }
+
     setInteractions(found);
     setActiveTab('results');
   };
@@ -213,6 +222,7 @@ export default function SupplementInteractionChecker() {
           </TabsTrigger>
         </TabsList>
 
+        <SupplementSelectionTab />
         <TabsContent value="selection" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card>

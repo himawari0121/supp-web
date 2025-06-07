@@ -1,34 +1,6 @@
-import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './ui/tabs';
 import { Activity, Brain, Utensils } from './icons';
-import { Badge } from './ui/badge';
-import { Label } from './ui/label';
-
-export default function NutritionCarePlan() {
-  // Placeholder user data
-  const userId = 'demo';
-
-  const createInterventionPlan = () => [
-    {
-      category: '栄養補給',
-      intervention: '高たんぱく質・高エネルギー食の提供',
-      details: ['1日6回の少量頻回食', 'たんぱく質強化食品の使用', '嚥下調整食コード2-1'],
-    },
-    {
-      category: '栄養教育',
-      intervention: 'たんぱく質摂取の重要性に関する教育',
-      details: ['筋肉量維持のためのたんぱく質の役割', '良質なたんぱく質源の選択方法', '調理方法の工夫'],
-    },
-    {
-      category: '栄養カウンセリング',
-      intervention: '食事摂取に関する行動変容支援',
-      details: ['食事記録の活用', '目標設定と段階的な実施', '家族を含めた支援体制の構築'],
-    },
-  ];
-
-  return (
-    <div className="space-y-6 w-full max-w-3xl mx-auto p-4">
 
 export default function NutritionCarePlan() {
   return (

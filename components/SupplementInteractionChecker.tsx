@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect } from 'react';
 import useSupplementStore from '../stores/useSupplementStore';
 import { useState, useEffect } from 'react';
